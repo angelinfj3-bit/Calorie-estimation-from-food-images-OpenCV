@@ -11,13 +11,13 @@ def build_filters():
     filters = []
     ksize = 31
     for theta in np.arange(0, np.pi, np.pi / 8):
-	for wav in [ 8.0, 13.0]:
-		for ar in [0.8, 2.0]:
-        		kern = cv2.getGaborKernel((ksize, ksize), 5.0, theta, wav, ar, 0, ktype=cv2.CV_32F)
-			filters.append(kern)
+      for wav in [ 8.0, 13.0]:
+        for ar in [0.8, 2.0]:
+                kern = cv2.getGaborKernel((ksize, ksize), 5.0, theta, wav, ar, 0, ktype=cv2.CV_32F)
+                filters.append(kern)
     cv2.imshow('filt', filters[9])
     return filters
-	
+    
 def process_threaded(img, filters, threadn = 8):
     accum = np.zeros_like(img)
     def f(kern):
@@ -28,9 +28,9 @@ def process_threaded(img, filters, threadn = 8):
     return accum
 
 def EnergySum(img):
-	mean, dev = cv2.meanStdDev(img)
-	return mean[0][0], dev[0][0]
-	
+    mean, dev = cv2.meanStdDev(img)
+    return mean[0][0], dev[0][0]
+    
 def process(img, filters):
     '''
     Given an image and gabor filters,
@@ -39,11 +39,11 @@ def process(img, filters):
     feature = []
     accum = np.zeros_like(img)
     for kern in filters:
-    	fimg = cv2.filter2D(img, cv2.CV_8UC3, kern)  
+        fimg = cv2.filter2D(img, cv2.CV_8UC3, kern)  
         a, b = EnergySum(fimg)
         feature.append(a)
         feature.append(b)
-    	np.maximum(accum, fimg, accum)
+        np.maximum(accum, fimg, accum)
     
     M = max(feature)
     m = min(feature)
@@ -67,13 +67,13 @@ def getTextureFeature(img):
 if __name__ == '__main__':
     import sys
     #from common import Timer
-    print __doc__
+    print (__doc__)
     try: img_fn = sys.argv[1]
 
     except: img_fn = 'test.JPG'
     img = cv2.imread(img_fn)
     
-    print getTextureFeature(img)
+    print(getTextureFeature(img))
    
     cv2.waitKey()
     cv2.destroyAllWindows()
